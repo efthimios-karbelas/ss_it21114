@@ -11,11 +11,48 @@ cd ss_it21114
 docker compose up -d --build
 ```
 
-Now open http://localhost/ in a web browser.
+Now wait a minute and then open http://localhost/ in a web browser.
 
 Cleanup after done:
 
 ```
 cd ss_it21114
 docker compose down -v
+```
+
+Users are autocreated with script.
+The password is always:
+
+```
+it21114
+```
+
+Admin username:
+
+```
+admin1
+```
+
+Volunteers usernames
+
+```
+volunteer1
+volunteer2
+volunteer3
+...
+volunteer48
+volunteer49
+volunteer50
+```
+
+Volunteers usernames
+
+```
+organization1
+organization2
+organization3
+...
+organization18
+organization19
+organization20
 ```
