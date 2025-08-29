@@ -1,0 +1,27 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Create Organization</title>
+        <link rel="stylesheet" th:href="@{/css/pages.css}"/>
+    </head>
+    <body>
+        <h2>Create Organization</h2>
+        <form th:action="@{/pages/admin/organizations/create}" method="post" class="row" th:object="${form}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <label>Username</label>
+            <input type="text" th:field="*{username}" required/>
+            <label>Password</label>
+            <input type="password" th:field="*{password}" required/>
+            <label>Full name</label>
+            <input type="text" th:field="*{fullName}"/>
+            <label>Organization name</label>
+            <input type="text" th:field="*{organizationName}" required/>
+            <div class="actions padding-top">
+                <a class="btn red" th:href="@{/pages/admin/pending}">Cancel</a>
+                <button class="btn green" type="submit">Create</button>
+            </div>
+        </form>
+    </body>
+</html>

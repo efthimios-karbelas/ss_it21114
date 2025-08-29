@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="run" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="ss_it21114" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.hua.ss_it21114.SsIt21114Application" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

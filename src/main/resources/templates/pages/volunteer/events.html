@@ -1,0 +1,54 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Available Events</title>
+        <link rel="stylesheet" th:href="@{/css/pages.css}"/>
+    </head>
+    <body>
+        <header>
+            <h2>Available events</h2>
+            <nav class="actions">
+                <a class="btn blue" th:href="@{/pages/volunteer/my-signups}">My signups</a>
+                <form th:action="@{/pages/logout}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button class="btn red" type="submit">Logout</button>
+                </form>
+            </nav>
+        </header>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date/Time</th>
+                    <th>Location</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="e : ${page.content}"
+                    th:with="applied=${appliedEventIds != null and appliedEventIds.contains(e.id)}">
+                    <td th:text="${e.title}"></td>
+                    <td>
+                        <span th:text="${#temporals.format(e.startsAt, 'dd/MM/yyyy HH:mm')}"></span>
+                        &nbsp;–&nbsp;
+                        <span th:text="${#temporals.format(e.endsAt, 'dd/MM/yyyy HH:mm')}"></span>
+                    </td>
+                    <td th:text="${e.location}"></td>
+                    <td>
+                        <form th:if="${!applied}" th:action="@{/pages/volunteer/{eventId}/apply(eventId=${e.id})}"
+                              method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button class="btn green" type="submit">Apply</button>
+                        </form>
+                        <!-- TODO doesn't work, always displays apply button -->
+                        <span class="muted" th:if="${applied}">Already applied</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

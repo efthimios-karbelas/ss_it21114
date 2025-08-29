@@ -1,0 +1,141 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Pending Approvals</title>
+        <link rel="stylesheet" th:href="@{/css/pages.css}"/>
+    </head>
+    <body>
+        <header>
+            <h2>Pending Approvals</h2>
+            <div class="actions">
+                <a class="btn green" th:href="@{/pages/admin/volunteers/new}">New Volunteer</a>
+                <a class="btn green" th:href="@{/pages/admin/organizations/new}">New Organization</a>
+            </div>
+            <form th:action="@{/pages/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button class="btn red" type="submit">Logout</button>
+            </form>
+        </header>
+        <section>
+            <h3>Organizations</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="w20">ID</th>
+                        <th class="w20">Organization user full name</th>
+                        <th class="w20">Organization name</th>
+                        <th class="w20">Username</th>
+                        <th class="w20">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="org : ${pendingOrgs}">
+                        <td th:text="${org.id}"></td>
+                        <td th:text="${org.user != null ? org.user.fullName : '-'}"></td>
+                        <td th:text="${org.organizationName}"></td>
+                        <td th:text="${org.user != null ? org.user.username : '-'}"></td>
+                        <td>
+                            <div class="actions">
+                                <a class="btn blue" th:href="@{|/pages/admin/organizations/${org.id}/edit|}">Edit</a>
+                                <form th:action="@{|/pages/admin/organizations/${org.id}/approve|}" method="post"
+                                      style="display:inline;">
+                                    <input type="hidden" name="approve" value="true"/>
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                    <button class="btn green" type="submit">Approve</button>
+                                </form>
+                                <form th:action="@{|/pages/admin/organizations/${org.id}/delete|}" method="post"
+                                      style="display:inline;">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                    <button class="btn red" type="submit"
+                                            onclick="return confirm('Delete organization?');">Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(pendingOrgs)}">
+                        <td colspan="5">No pending organizations.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <section>
+            <h3>Volunteers</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="w25">ID</th>
+                        <th class="w25">Volunteer full name</th>
+                        <th class="w25">Username</th>
+                        <th class="w25">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="v : ${pendingVols}">
+                        <td th:text="${v.id}"></td>
+                        <td th:text="${v.user != null ? v.user.fullName : '-'}"></td>
+                        <td th:text="${v.user != null ? v.user.username : '-'}"></td>
+                        <td>
+                            <div class="actions">
+                                <a class="btn blue" th:href="@{|/pages/admin/volunteers/${v.id}/edit|}">Edit</a>
+                                <form th:action="@{|/pages/admin/volunteers/${v.id}/approve|}" method="post"
+                                      style="display:inline;">
+                                    <input type="hidden" name="approve" value="true"/>
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                    <button class="btn green" type="submit">Approve</button>
+                                </form>
+                                <form th:action="@{|/pages/admin/volunteers/${v.id}/delete|}" method="post"
+                                      style="display:inline">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                    <button class="btn red" type="submit"
+                                            onclick="return confirm('Delete volunteer?');">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(pendingVols)}">
+                        <td colspan="4">No pending volunteers.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <section>
+            <h3>Events pending publishing</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="w25">Starts</th>
+                        <th class="w25">Ends</th>
+                        <th class="w25">Title</th>
+                        <th class="w25">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(pendingEvents)}">
+                        <td colspan="4">No pending events.</td>
+                    </tr>
+                    <tr th:each="e : ${pendingEvents}">
+                        <td th:text="${#temporals.format(e.startsAt, 'yyyy-MM-dd HH:mm')}"></td>
+                        <td th:text="${#temporals.format(e.endsAt, 'yyyy-MM-dd HH:mm')}"></td>
+                        <td th:text="${e.title}"></td>
+                        <td class="actions">
+                            <form th:action="@{|/pages/admin/events/${e.id}/publish|}" method="post">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                <button class="btn green" type="submit">Publish</button>
+                            </form>
+                            <form th:action="@{|/pages/admin/events/${e.id}/delete|}" method="post"
+                                  onsubmit="return confirm('Delete this event?');">
+                                <button class="btn red" type="submit">Delete</button>
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </body>
+</html>
